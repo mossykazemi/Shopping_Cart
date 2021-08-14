@@ -21,6 +21,7 @@ namespace Shopping_Cart.Models
         [Required]
         public string ImageName { get; set; }
 
+
         public List<OrderDetail> OrderDetails { get; set; }
 
     }

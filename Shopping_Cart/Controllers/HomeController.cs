@@ -6,21 +6,24 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Shopping_Cart.Data;
 
 namespace Shopping_Cart.Controllers
 {
     public class HomeController : Controller
     {
+        private MyContext _context;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(MyContext context, ILogger<HomeController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.Products);
         }
 
         public IActionResult Privacy()
