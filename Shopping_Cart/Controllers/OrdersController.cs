@@ -148,5 +148,15 @@ namespace Shopping_Cart.Controllers
             _context.Update(order);
             _context.SaveChanges();
         }
+
+        public IActionResult Payment()
+        {
+            var order = _context.Orders.SingleOrDefault(o => !o.IsFinally);
+            if (order!=null)
+            {
+                return NotFound();
+            }
+            return null;
+        }
     }
 }
