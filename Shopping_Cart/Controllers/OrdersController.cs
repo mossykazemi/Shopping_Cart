@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Shopping_Cart.Data;
 using Shopping_Cart.Models;
 using Shopping_Cart.Models.ViewModels;
+using ZarinpalSandbox;
 
 namespace Shopping_Cart.Controllers
 {
@@ -152,9 +153,20 @@ namespace Shopping_Cart.Controllers
         public IActionResult Payment()
         {
             var order = _context.Orders.SingleOrDefault(o => !o.IsFinally);
-            if (order!=null)
-            {
+            if (order == null)
                 return NotFound();
+
+            var payment = new Payment(order.Sum);
+            var res = payment.PaymentRequest($"پرداخت فاکتور شماره {order.OrderId}",
+                "https://localhost:44363/Home/OnlinePayment/" + order.OrderId,
+                "m.kazemi.512@gmail.com","09217701362");
+            if (res.Result.Status==100)
+            {
+                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + res.Result.Authority);
+            }
+            else
+            {
+                return BadRequest();//or we can set optional message here 
             }
             return null;
         }

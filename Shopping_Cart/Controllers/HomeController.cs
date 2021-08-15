@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Shopping_Cart.Data;
+using ZarinpalSandbox;
 
 namespace Shopping_Cart.Controllers
 {
@@ -30,6 +31,30 @@ namespace Shopping_Cart.Controllers
         {
             return View();
         }
+
+        public IActionResult OnlinePayment(int id)//id is OrderId
+        {
+            if (HttpContext.Request.Query["Status"] != "" &&
+                HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
+                HttpContext.Request.Query["Authority"] != "")
+            {
+                string authority = HttpContext.Request.Query["Authority"].ToString();
+                var order = _context.Orders.Find(id);
+                var payment = new Payment(order.Sum);
+                var res = payment.Verification(authority).Result;
+                if (res.Status == 100)
+                {
+                    order.IsFinally = true;
+                    _context.Orders.Update(order);
+                    _context.SaveChanges();
+                    ViewBag.Code = res.RefId;
+                    return View();
+                }
+            }
+
+            return NotFound();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
