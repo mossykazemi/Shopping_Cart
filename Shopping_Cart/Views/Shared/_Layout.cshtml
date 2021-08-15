@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Shopping_Cart.Components
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,10 +32,13 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
-            <div class="col-md-3"></div>
+        <main role="main" class="pb-3 row">
+
             <div class="col-md-9">
                 @RenderBody()
+            </div>
+            <div class="col-md-3">
+                @await Component.InvokeAsync("CartComponent")
             </div>
         </main>
     </div>

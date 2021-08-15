@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Shopping_Cart.Models.ViewModels.ShowCartViewModel>
+
+<div class="card">
+    <div class="card-header">
+        سبد خرید شما
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <div class="row mt-1">
+                    <div class="col-md-4">
+                        <img src="/Images/@item.ImageName" alt="@item.Title" class="img-thumbnail" style="max-width: 100%" />
+                    </div>
+                    <div class="col-md-8">
+                        <p>@item.Title <span class="badge badge-pill badge-dark">@item.Count</span></p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted text-center">سبد خرید خالی است</p>
+        }
+    </div>
+    @if (Model.Any())
+    {
+        <div class="card-footer">
+            <a class="btn btn-info btn-block text-white">نمایش فاکتور</a>
+        </div>
+    }
+</div>
