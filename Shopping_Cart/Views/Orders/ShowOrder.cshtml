@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Shopping_Cart.Models.ViewModels.ShowOrderViewModel>
+@{
+    ViewData["Title"] = "ShowOrder";
+    int row = 1;
+}
+
+<h1>نمایش فاکتور</h1>
+<hr />
+<table class="table table-bordered">
+    <tr>
+        <th>#</th>
+        <th>تصویر</th>
+        <th>عنوان</th>
+        <th>تعداد</th>
+        <th>قیمت</th>
+        <th>جمع</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@row</td>
+            <td>
+                <img style="max-width:150px" class="img-thumbnail" src="/Images/@item.ImageName" />
+            </td>
+            <td>@item.Title</td>
+            <td>@item.Count</td>
+            <td>@item.Price</td>
+            <td>@item.Sum</td>
+            <td>
+                <a class="btn btn-sm btn-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.OrderDetailId">
+                    حذف
+                </a>
+            </td>
+        </tr>
+        row++;
+    }
+</table>
+

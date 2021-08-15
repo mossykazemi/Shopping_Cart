@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Shopping_Cart.Data;
 using Shopping_Cart.Models;
+using Shopping_Cart.Models.ViewModels;
 
 namespace Shopping_Cart.Controllers
 {
@@ -71,6 +72,34 @@ namespace Shopping_Cart.Controllers
             }
             UpdateSumOrder(order.OrderId);
             return Redirect("/");
+        }
+
+
+        public IActionResult ShowOrder()
+        {
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Order order = _context.Orders.SingleOrDefault(o => o.UserId == currentUserId && !o.IsFinally);
+
+            List<ShowOrderViewModel> _list = new List<ShowOrderViewModel>();
+            if (order != null)
+            {
+                var details = _context.OrderDetails.Where(od => od.OrderId == order.OrderId).ToList();
+                foreach (var item in details)
+                {
+                    var product = _context.Products.Find(item.ProductId);
+                    _list.Add(new ShowOrderViewModel
+                    {
+                        Count = item.Count,
+                        ImageName = product.ImageName,
+                        OrderDetailId = item.OrderDetailId,
+                        Price = item.Price,
+                        Sum = item.Count * item.Price,
+                        Title = product.Title
+                    });
+                }
+            }
+
+            return View(_list);
         }
 
         public void UpdateSumOrder(int orderId)
