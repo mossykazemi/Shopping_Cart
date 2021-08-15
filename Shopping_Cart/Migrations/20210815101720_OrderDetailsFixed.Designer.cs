@@ -10,8 +10,8 @@ using Shopping_Cart.Data;
 namespace Shopping_Cart.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20210814192515_InitOrderTables")]
-    partial class InitOrderTables
+    [Migration("20210815101720_OrderDetailsFixed")]
+    partial class OrderDetailsFixed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,7 +48,7 @@ namespace Shopping_Cart.Migrations
 
             modelBuilder.Entity("Shopping_Cart.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("OrderDetailtId")
+                    b.Property<int>("OrderDetailId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -65,7 +65,7 @@ namespace Shopping_Cart.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderDetailtId");
+                    b.HasKey("OrderDetailId");
 
                     b.HasIndex("OrderId");
 
@@ -104,7 +104,7 @@ namespace Shopping_Cart.Migrations
 
             modelBuilder.Entity("Shopping_Cart.Models.OrderDetail", b =>
                 {
-                    b.HasOne("Shopping_Cart.Models.Order", "order")
+                    b.HasOne("Shopping_Cart.Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -116,7 +116,7 @@ namespace Shopping_Cart.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("order");
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });

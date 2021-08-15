@@ -13,5 +13,20 @@ namespace Shopping_Cart.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<OrderDetail>()
+        //        .HasOne(o => o.Product)
+        //        .WithMany(p => p.OrderDetails)
+        //        .HasForeignKey(f => f.ProductId);
+
+        //    modelBuilder.Entity<OrderDetail>()
+        //        .HasOne(o => o.Order)
+        //        .WithMany(od => od.OrderDetails)
+        //        .HasForeignKey(f => f.OrderId);
+
+        //    base.OnModelCreating(modelBuilder);
+        //}
     }
 }

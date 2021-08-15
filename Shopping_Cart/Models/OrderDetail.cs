@@ -13,9 +13,11 @@ namespace Shopping_Cart.Models
         public int OrderDetailId { get; set; }
 
         [Required]
+        [ForeignKey("Order")]
         public int OrderId { get; set; }
 
         [Required]
+        [ForeignKey("Product")]
         public int ProductId { get; set; }
 
         [Required]

@@ -28,21 +28,24 @@ namespace Shopping_Cart.Controllers
 
             if (order == null)
             {
-                order = new Order
+                order = new Order()
                 {
                     UserId = currentUserId,
                     CreateDate = DateTime.Now,
                     IsFinally = false,
                     Sum = 0
                 };
-                _context.Orders.Add(order);
-                _context.OrderDetails.Add(new OrderDetail
+                _context.Add(order);
+                _context.SaveChanges();
+
+                _context.OrderDetails.Add(new OrderDetail()
                 {
                     OrderId = order.OrderId,
                     Count = 1,
                     Price = _context.Products.Find(id).Price,
-                    ProductId = id
+                    ProductId = id,
                 });
+                //_context.OrderDetails.Add(od);
                 _context.SaveChanges();
             }
             else
