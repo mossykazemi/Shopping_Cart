@@ -102,6 +102,45 @@ namespace Shopping_Cart.Controllers
             return View(_list);
         }
 
+        public IActionResult Delete(int id)
+        {
+            var orderDetail = _context.OrderDetails.Find(id);
+            _context.Remove(orderDetail);
+            _context.SaveChanges();
+            return RedirectToAction("ShowOrder");
+        }
+
+        public IActionResult Command(int id, string command)
+        {
+            var orderDetail = _context.OrderDetails.Find(id);
+
+            switch (command)
+            {
+                case "up":
+                    {
+                        orderDetail.Count += 1;
+                        _context.Update(orderDetail);
+                        break;
+                    }
+                case "down":
+                    {
+                        orderDetail.Count -= 1;
+                        if (orderDetail.Count == 0)
+                        {
+                            _context.OrderDetails.Remove(orderDetail);
+                        }
+                        else
+                        {
+                            _context.Update(orderDetail);
+                        }
+                        break;
+                    }
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("ShowOrder");
+        }
+
         public void UpdateSumOrder(int orderId)
         {
             var order = _context.Orders.Find(orderId);

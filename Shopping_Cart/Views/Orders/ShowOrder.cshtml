@@ -6,7 +6,7 @@
 
 <h1>نمایش فاکتور</h1>
 <hr />
-<table class="table table-bordered">
+<table class="table table-bordered" dir="rtl">
     <tr>
         <th>#</th>
         <th>تصویر</th>
@@ -28,6 +28,8 @@
             <td>@item.Price</td>
             <td>@item.Sum</td>
             <td>
+                <a class="btn btn-sm btn-success" href="/Orders/Command/@item.OrderDetailId?command=up">افزایش</a>
+                <a class="btn btn-sm btn-warning" href="/Orders/Command/@item.OrderDetailId?command=down">کاهش</a>
                 <a class="btn btn-sm btn-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.OrderDetailId">
                     حذف
                 </a>
@@ -35,5 +37,17 @@
         </tr>
         row++;
     }
+    <tr>
+        <td colspan="5" class="text-left">جمع کل :</td>
+        <td colspan="2">
+            @Model.Sum(s => s.Sum).ToString("#,0 تومان")
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-right"></td>
+        <td colspan="3">
+            <a href="" class="btn btn-primary btn-block text-white font-weight-bold">تایید و پرداخت نهایی</a>
+        </td>
+    </tr>
 </table>
 
