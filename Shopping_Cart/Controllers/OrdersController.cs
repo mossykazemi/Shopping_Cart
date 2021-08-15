@@ -21,9 +21,9 @@ namespace Shopping_Cart.Controllers
         }
 
 
-        public IActionResult AddToCart(int id)
+        public IActionResult AddToCart(int id) //Product id
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);//User id
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);//User id
             Order order = _context.Orders.SingleOrDefault(o => o.UserId == currentUserId && !o.IsFinally);//check to see if user have an Open Order
 
             if (order == null)
@@ -64,10 +64,18 @@ namespace Shopping_Cart.Controllers
                     details.Count += 1;
                     _context.Update(details);
                 }
-
                 _context.SaveChanges();
             }
+            UpdateSumOrder(order.OrderId);
             return Redirect("/");
+        }
+
+        public void UpdateSumOrder(int orderId)
+        {
+            var order = _context.Orders.Find(orderId);
+            order.Sum = _context.OrderDetails.Where(od => od.OrderId == order.OrderId).Select(d => d.Count * d.Price).Sum();
+            _context.Update(order);
+            _context.SaveChanges();
         }
     }
 }
