@@ -34,6 +34,7 @@ namespace Shopping_Cart
             services.AddSingleton(new JobSchedule(jobType: typeof(RemoveCartJob), cronExpression:
                 "0/5 * * * * ?"
                 ));
+            services.AddHostedService<QuartzHostedService>();
             //search google for cronExpression and timing values
             #endregion
 
