@@ -5,7 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using Shopping_Cart.Data;
+using Shopping_Cart.Jobs;
 
 namespace Shopping_Cart
 {
@@ -21,6 +25,20 @@ namespace Shopping_Cart
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Quartz
+
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+            services.AddSingleton<RemoveCartJob>();
+            services.AddSingleton(new JobSchedule(jobType: typeof(RemoveCartJob), cronExpression:
+                "0/5 * * * * ?"
+                ));
+            //search google for cronExpression and timing values
+            #endregion
+
+            #region Db Context
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -31,8 +49,14 @@ namespace Shopping_Cart
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            #endregion
+
+            #region Identity
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            #endregion
 
             services.AddControllersWithViews();
         }
